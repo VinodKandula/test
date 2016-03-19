@@ -18,10 +18,13 @@ public class WebsiteAnalyzer {
 
 	/*private static SortedSet<Website> orderedSet = new TreeSet<>(new Comparator<Website>() {
         public int compare(Website site1, Website site2) {
-            return new Integer(site1.getCounter()).compareTo(site2.getCounter());
+    			if (site1.getCounter() < site2.getCounter()) {
+    				return 1;
+    			}
+    			return -1;
         }
-    });
-*/
+    });*/
+
 	private static List<Website> list = new ArrayList<>();
 	private static Map<String, Website> _websiteMap = new ConcurrentHashMap<>();
 
@@ -41,11 +44,16 @@ public class WebsiteAnalyzer {
 		}
 	}
 
-	public List<Website> getTopNPages(int n) {
+	public List<String> getTopNPages(int n) {
 		Collections.sort(list, new WebsiteComp());
 		
 		if (n > 0 ) {
-			return list.subList(0, list.size() > n ? n : list.size());
+			List<Website> webPageList = list.subList(0, list.size() > n ? n : list.size());
+			List<String> topWebpages = new ArrayList<>(webPageList.size());
+			for (Website website : webPageList) {
+				topWebpages.add(website.getWebpage());
+			}
+			return topWebpages;
 		}
 		return null;
 	}
@@ -63,7 +71,7 @@ public class WebsiteAnalyzer {
 		websiteAnalyzer.reportPageAccess("google.com");
 		websiteAnalyzer.reportPageAccess("facebook.com");
 		websiteAnalyzer.reportPageAccess("amazon.com");
-		websiteAnalyzer.reportPageAccess("toovia.com");
+		//websiteAnalyzer.reportPageAccess("toovia.com");
 		websiteAnalyzer.reportPageAccess("flipkart.com");
 		websiteAnalyzer.reportPageAccess("flipkart.com");
 		websiteAnalyzer.reportPageAccess("flipkart.com");
@@ -73,14 +81,17 @@ public class WebsiteAnalyzer {
 		websiteAnalyzer.reportPageAccess("google.com");
 		websiteAnalyzer.reportPageAccess("google.com");
 
-		System.out.println("Top webpages list : " + websiteAnalyzer.getTopNPages(3));
+		System.out.println("Top webpages list : " + websiteAnalyzer.getTopNPages(5));
 	}
 
 	class WebsiteComp implements Comparator<Website> {
 		
 		@Override
 		 public int compare(Website site1, Website site2) {
-            return new Integer(site1.getCounter()).compareTo(new Integer(site2.getCounter()));
+			if (site1.getCounter() < site2.getCounter()) {
+				return 1;
+			}
+			return -1;
         }
 
 	}
@@ -109,15 +120,7 @@ public class WebsiteAnalyzer {
 		public String toString() {
 			return "Website [webpage=" + webpage + ", counter=" + counter + "]";
 		}
-
-		/*@Override
-		public int compareTo(Website o) {
-			if (this.getCounter() > o.getCounter()) {
-				return 1;
-			} else {
-				return -1;
-			}
-		}*/
+		
 	}
 
 }
