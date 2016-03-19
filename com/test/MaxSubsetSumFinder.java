@@ -21,7 +21,7 @@ public class MaxSubsetSumFinder {
 	}
 
 	public static void main(String args[]) {
-	    System.out.println(ofNonConsecutiveElements(9, 17, 11, 20, 15, 3));
+	    System.out.println(ofNonConsecutiveElements(9, -17, 11, 20, 15, 3, -40));
 	}
 
 }
